@@ -5,9 +5,10 @@ import Services from "./pages/Services";
 import QuoteForm from "./pages/QuoteForm";
 import AboutUs from "./pages/AboutUs";
 import ContactPage from "./pages/ContactPage";
+
 const App = () => {
   return (
-    <Router>
+    <Router basename="/Pryme"> {/* 👈 Add this line */}
       <div className="overflow-x-hidden">
         <Routes>
           <Route path="/" element={<HomePage />} />
