@@ -14,15 +14,15 @@ export default function HomePage() {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      {/* Hero Section - full width blue background */}
-      <section className="bg-blue-600 text-white py-8 px-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:flex md:justify-between md:items-center md:gap-6">
-          <div className="max-w-xl py-16 px-4 md:px-0">
+      {/* Hero Section */}
+      <section className="bg-blue-600 text-white py-8 px-4 md:px-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="max-w-xl py-8 px-2 md:px-0">
             <div className="flex items-center">
               <span className="h-px w-6 bg-white mr-3"></span>
               <p className="uppercase text-sm tracking-wide">Fast Cleaning</p>
             </div>
-            <h2 className="text-[45px] md:text-4xl font-bold mt-2">
+            <h2 className="text-[32px] sm:text-[40px] md:text-[45px] font-bold mt-2 leading-tight">
               One Call Solves All
               <br /> Your Home Needs
             </h2>
@@ -43,17 +43,16 @@ export default function HomePage() {
           <img
             src={HomePage1}
             alt="Cleaning"
-            className="mt-8 md:mt-0 rounded-2xl w-full max-w-[622px] h-[300px] object-cover shadow-lg border-4 border-white"
+            className="mt-8 md:mt-0 rounded-2xl w-full md:max-w-[622px] h-auto object-cover shadow-lg border-4 border-white"
           />
         </div>
       </section>
 
-      {/* Container for the rest of the content */}
+      {/* Featured Services */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Featured Services */}
         <section className="py-16 text-center">
           <h3 className="text-2xl font-semibold mb-10">Featured Services</h3>
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex flex-col md:flex-row md:flex-wrap md:justify-center gap-6">
             {[
               {
                 title: "Floor Cleaning",
@@ -72,19 +71,19 @@ export default function HomePage() {
             ].map((service, index) => (
               <div
                 key={index}
-                className="flex w-full md:w-[calc(46%-12px)] border border-blue-600 rounded-2xl overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
+                className="flex flex-col sm:flex-row w-full md:w-[calc(46%-12px)] border border-blue-600 rounded-2xl overflow-hidden shadow hover:shadow-lg transition-shadow duration-200"
               >
                 <img
                   src={service.img}
                   alt={service.title}
-                  className="w-1/2 h-auto object-cover"
+                  className="w-full sm:w-1/2 h-auto object-cover"
                 />
-                <div className="w-1/2 p-4 text-left flex flex-col justify-between">
+                <div className="w-full sm:w-1/2 p-4 text-left flex flex-col justify-between">
                   <div>
                     <div className="bg-blue-600 text-white text-xs font-medium px-2 py-1 inline-block rounded mb-2">
                       {service.badge}
                     </div>
-                    <h4 className="mt-9 text-md font-semibold">
+                    <h4 className="mt-4 text-md font-semibold">
                       {service.title}
                     </h4>
                     <p className="text-sm text-gray-600 mt-2">
@@ -101,13 +100,13 @@ export default function HomePage() {
         </section>
       </div>
 
-      {/* Testimonials - full width background */}
+      {/* Testimonials */}
       <section style={{ backgroundColor: "#E8F0FD" }} className="py-16 px-4">
-        <div className="max-w-7xl mx-auto px-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-16">
           <h3 className="text-2xl font-semibold text-center mb-10">
             Testimonials
           </h3>
-          <div className="grid gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 image: User1,
@@ -163,7 +162,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

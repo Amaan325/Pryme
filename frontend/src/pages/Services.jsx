@@ -14,6 +14,7 @@ import { NavLink } from "react-router-dom";
 
 const Services = () => {
   const [searchTerm, setSearchTerm] = useState("");
+
   const services = [
     {
       title: "Hotel Room Cleaning",
@@ -67,17 +68,18 @@ const Services = () => {
       title: "Carpet Cleaning",
       description:
         "Deep cleaning for your carpets, removing stains and allergens for a fresher home.",
-      image: Service1, // You can reuse an image or add another one
+      image: Service1,
     },
   ];
 
   const filteredServices = services.filter((service) =>
     service.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-16 px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-16 py-8">
         {/* Search Bar */}
         <div className="mb-8">
           <input
@@ -89,6 +91,7 @@ const Services = () => {
           />
         </div>
 
+        {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredServices.map((service, index) => (
             <div
@@ -112,25 +115,25 @@ const Services = () => {
 
                 <NavLink
                   to="/quote-form"
-                  className="mt-auto border border-blue-600 text-blue-700 bg-white rounded-lg px-4 py-2 hover:bg-blue-600 transition-colors duration-300"
+                  className="mt-auto w-full block"
                 >
-                  <button>Book Now</button>
+                  <button className="w-full border border-blue-600 text-blue-700 bg-white rounded-lg px-4 py-2 hover:bg-blue-600 hover:text-white transition-colors duration-300">
+                    Book Now
+                  </button>
                 </NavLink>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Pagination - Corrected section */}
+        {/* Pagination */}
         <div className="w-full border-t border-b border-gray-200 py-4 mt-10">
           <div className="flex justify-center items-center">
             <div className="flex items-center gap-1">
-              {/* Left Arrow */}
               <button className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
                 <IoIosArrowBack className="text-gray-600 text-lg" />
               </button>
 
-              {/* Page Numbers */}
               <button className="px-4 py-2 rounded bg-blue-500 text-white font-medium">
                 1
               </button>
@@ -141,7 +144,6 @@ const Services = () => {
                 3
               </button>
 
-              {/* Right Arrow */}
               <button className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
                 <IoIosArrowForward className="text-gray-600 text-lg" />
               </button>
