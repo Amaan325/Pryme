@@ -43,7 +43,7 @@ const Footer = () => {
             I confirm that I have read X Cleaning's Privacy policy and agree
             with it.
           </p>
-          <div className="flex space-x-3 text-gray-700 text-xl gap-3 pr-20">
+          <div className="flex space-x-3 text-gray-700 text-xl gap-3 pr-[36px]">
             <MdLocalPostOffice />
             <FaLinkedinIn />
             <FaTwitter />

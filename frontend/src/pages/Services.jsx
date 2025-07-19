@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Service1 from "../assets/service1.jpg";
-import Service2 from "../assets/service2.jpg";
-import Service3 from "../assets/service3.jpg";
-import Service4 from "../assets/service4.jpg";
-import Service5 from "../assets/service5.jpg";
-import Service6 from "../assets/service6.jpg";
-import Service7 from "../assets/service7.jpg";
-import Service8 from "../assets/service8.jpg";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
@@ -20,55 +12,55 @@ const Services = () => {
       title: "Hotel Room Cleaning",
       description:
         "Our hotel room cleaning service ensures a spotless, comfortable stay. We provide thorough cleaning of all surfaces.",
-      image: Service1,
+      image: "/service1.jpg",
     },
     {
       title: "Mirrors Cleaning",
       description:
         "Our mirror cleaning service leaves your mirrors sparkling and streak-free. We use special techniques.",
-      image: Service2,
+      image: "/service2.jpg",
     },
     {
       title: "Bath Cleaning",
       description:
         "Our bath cleaning service provides a deep clean for your bathroom, leaving it fresh and sparkling. We tackle every surface.",
-      image: Service3,
+      image: "/service3.jpg",
     },
     {
       title: "Floor Cleaning",
       description:
         "Whether it's hardwood, tile, or carpet, we ensure every inch is thoroughly cleaned and maintained very nicely.",
-      image: Service4,
+      image: "/service4.jpg",
     },
     {
       title: "Grass Cutting",
       description:
         "Our grass cutting service keeps your lawn neat and well-maintained. We trim and shape your grass to perfection.",
-      image: Service5,
+      image: "/service5.jpg",
     },
     {
       title: "Shop Management",
       description:
         "Our shop management service ensures smooth, efficient operations for your business and makes it easy.",
-      image: Service6,
+      image: "/service6.jpg",
     },
     {
       title: "Office Cleaning",
       description:
         "Professional office cleaning service to maintain a clean and productive work environment.",
-      image: Service7,
+      image: "/service7.jpg",
     },
     {
       title: "Window Washing",
       description:
         "Crystal clear windows with our professional washing service, reaching all heights safely.",
-      image: Service8,
+      image: "/service8.jpg",
     },
     {
       title: "Carpet Cleaning",
       description:
         "Deep cleaning for your carpets, removing stains and allergens for a fresher home.",
-      image: Service1,
+      image: "/service1.jpg",
     },
   ];
 
@@ -102,6 +94,7 @@ const Services = () => {
                 src={service.image}
                 alt={service.title}
                 className="h-48 w-full object-cover"
+                loading="lazy"
               />
               <div className="p-4 flex flex-col justify-between h-full">
                 <div>
@@ -113,10 +106,7 @@ const Services = () => {
                   </p>
                 </div>
 
-                <NavLink
-                  to="/quote-form"
-                  className="mt-auto w-full block"
-                >
+                <NavLink to="/quote-form" className="mt-auto w-full block">
                   <button className="w-full border border-blue-600 text-blue-700 bg-white rounded-lg px-4 py-2 hover:bg-blue-600 hover:text-white transition-colors duration-300">
                     Book Now
                   </button>
