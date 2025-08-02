@@ -37,6 +37,7 @@ exports.getServices = async (req, res) => {
   console.log("I am here");
   try {
     const services = await Service.find();
+    console.log("Fetched services:", services);
     res.status(200).json(services);
   } catch (error) {
     console.error("Get services failed:", error);
