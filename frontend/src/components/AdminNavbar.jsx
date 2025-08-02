@@ -18,7 +18,6 @@ const AdminNavbar = () => {
     const checkAuth = async () => {
       try {
         const response = await axiosInstance.get("/admin/me");
-        console.log("Auth check response:", response.data);
         setIsAuthenticated(true);
         fetchNotifications();
 
@@ -90,11 +89,11 @@ const AdminNavbar = () => {
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-md z-50 overflow-hidden border">
-                  <div className="p-3 border-b font-semibold bg-gray-100">
+                <div className="absolute right-0 mt-2 w-72 bg-white shadow-lg rounded-md z-50 overflow-hidden border">
+                  <div className="p-3 border-b font-semibold text-white bg-blue-600">
                     Notifications
                   </div>
-                  <div className="max-h-96 overflow-y-auto">
+                  <div className="max-h-96 overflow-y-auto divide-y">
                     {notifications.length === 0 ? (
                       <div className="p-4 text-sm text-gray-500 text-center">
                         No notifications
@@ -103,14 +102,18 @@ const AdminNavbar = () => {
                       notifications.map((notif, idx) => (
                         <div
                           key={idx}
-                          className="p-3 border-b hover:bg-gray-50 text-sm"
+                          className="flex items-start justify-between p-3 hover:bg-gray-50 text-sm"
                         >
-                          <div className="font-medium">{notif.message}</div>
-                          <div className="text-xs text-gray-500">
-                            {new Date(notif.createdAt).toLocaleString()}
+                          <div className="flex-1 overflow-hidden">
+                            <div className="font-medium text-gray-800 truncate w-full">
+                              {notif.message}
+                            </div>
+                            <div className="text-xs text-gray-500 truncate w-full">
+                              {new Date(notif.createdAt).toLocaleString()}
+                            </div>
                           </div>
                           <button
-                            className="mt-1 text-blue-600 hover:underline text-xs"
+                            className="ml-2 text-blue-600 hover:underline text-xs whitespace-nowrap"
                             onClick={() => navigate("/admin/bookings")}
                           >
                             View

@@ -110,19 +110,19 @@ export default function HomePage() {
             {[
               {
                 image: User1,
-                name: "Haider Thatta",
+                name: "Haider Qureshi",
                 role: "Customer",
                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sodales dui at risus convallis.",
               },
               {
                 image: User2,
-                name: "Faizan Lodu",
+                name: "Faizan Awan",
                 role: "Customer",
                 text: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames.",
               },
               {
                 image: User3,
-                name: "Zain Gandu",
+                name: "Zain Gandapur",
                 role: "Customer",
                 text: "Fusce varius, turpis nec bibendum posuere, ex magna fermentum nunc.",
               },
