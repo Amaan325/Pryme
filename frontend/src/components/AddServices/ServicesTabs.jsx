@@ -22,7 +22,7 @@ const ServicesTabs = () => {
     {
       label: "Bookings",
       icon: <IoMdContact className="w-6 h-6 mb-1" />,
-      path: "/bookings",
+      path: "/admin/bookings",
     },
   ];
 

@@ -89,7 +89,7 @@ const AdminNavbar = () => {
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-72 bg-white shadow-lg rounded-md z-50 overflow-hidden border">
+                <div className="absolute right-0 mt-2 w-96 bg-white shadow-lg rounded-md z-50 overflow-hidden border">
                   <div className="p-3 border-b font-semibold text-white bg-blue-600">
                     Notifications
                   </div>
@@ -114,7 +114,7 @@ const AdminNavbar = () => {
                           </div>
                           <button
                             className="ml-2 text-blue-600 hover:underline text-xs whitespace-nowrap"
-                            onClick={() => navigate("/admin/bookings")}
+                            onClick={() => navigate("/bookings")}
                           >
                             View
                           </button>

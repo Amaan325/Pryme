@@ -21,7 +21,7 @@ import TimeSheet from "./pages/TimeSheet";
 import AddServices from "./pages/AddServices";
 import Feedback from "./pages/Feedback";
 import AllServices from "./pages/AllServices";
-
+import BookingList from "./components/AddServices/BookingList";
 import AppWrapper from "./AppWrapper";
 import AdminWrapper from "./AdminWrapper";
 
@@ -132,6 +132,7 @@ const App = () => {
               <Route path="add-services" element={<AddServices />} />
               <Route path="reviews" element={<Feedback />} />
               <Route path="allservices" element={<AllServices />} />
+              <Route path="bookings" element={<BookingList />} />
             </Route>
           </Route>
         </Routes>
