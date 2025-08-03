@@ -3,10 +3,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import axiosInstance from "../utils/axiosInstance";
 import io from "socket.io-client";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AdminNavbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [hasNewNotification, setHasNewNotification] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
@@ -25,6 +27,7 @@ const AdminNavbar = () => {
 
         socket.on("admin-notification", (notif) => {
           setNotifications((prev) => [notif, ...prev]);
+          setHasNewNotification(true);
         });
       } catch (err) {
         setIsAuthenticated(false);
@@ -57,10 +60,14 @@ const AdminNavbar = () => {
     }
   };
 
+  const toggleDropdown = () => {
+    setShowDropdown((prev) => !prev);
+    setHasNewNotification(false); // Mark notifications as seen
+  };
+
   return (
     <div className="mx-4 sm:mx-8 md:mx-16 my-2 relative z-50 bg-white">
       <header className="flex items-center justify-between px-4 sm:px-8 py-4 relative">
-        {/* Logo */}
         <NavLink
           to="/"
           className="text-3xl font-bold text-blue-700"
@@ -69,61 +76,67 @@ const AdminNavbar = () => {
           Pryme
         </NavLink>
 
-        {/* Center title */}
         <div className="absolute left-1/2 transform -translate-x-1/2 text-gray-700 font-semibold text-lg sm:text-xl">
           Admin Dashboard
         </div>
 
-        {/* Right side */}
         {isAuthenticated && (
           <div className="flex items-center gap-4">
             <div className="relative">
               <button
                 className="relative p-2 rounded-full hover:bg-gray-100 transition"
-                onClick={() => setShowDropdown((prev) => !prev)}
+                onClick={toggleDropdown}
               >
                 <FiBell className="text-2xl text-blue-700" />
-                {notifications.length > 0 && (
-                  <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
+                {hasNewNotification && (
+                  <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-ping" />
                 )}
               </button>
 
-              {showDropdown && (
-                <div className="absolute right-0 mt-2 w-96 bg-white shadow-lg rounded-md z-50 overflow-hidden border">
-                  <div className="p-3 border-b font-semibold text-white bg-blue-600">
-                    Notifications
-                  </div>
-                  <div className="max-h-96 overflow-y-auto divide-y">
-                    {notifications.length === 0 ? (
-                      <div className="p-4 text-sm text-gray-500 text-center">
-                        No notifications
-                      </div>
-                    ) : (
-                      notifications.map((notif, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-start justify-between p-3 hover:bg-gray-50 text-sm"
-                        >
-                          <div className="flex-1 overflow-hidden">
-                            <div className="font-medium text-gray-800 truncate w-full">
-                              {notif.message}
-                            </div>
-                            <div className="text-xs text-gray-500 truncate w-full">
-                              {new Date(notif.createdAt).toLocaleString()}
-                            </div>
-                          </div>
-                          <button
-                            className="ml-2 text-blue-600 hover:underline text-xs whitespace-nowrap"
-                            onClick={() => navigate("/bookings")}
-                          >
-                            View
-                          </button>
+              <AnimatePresence>
+                {showDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-96 bg-white shadow-xl rounded-md z-50 overflow-hidden border"
+                  >
+                    <div className="p-3 border-b font-semibold text-white bg-blue-600">
+                      Notifications
+                    </div>
+                    <div className="max-h-96 overflow-y-auto divide-y">
+                      {notifications.length === 0 ? (
+                        <div className="p-4 text-sm text-gray-500 text-center">
+                          No notifications
                         </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
+                      ) : (
+                        notifications.map((notif, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-start justify-between p-3 hover:bg-gray-50 text-sm"
+                          >
+                            <div className="flex-1 overflow-hidden">
+                              <div className="font-medium text-gray-800 truncate w-full">
+                                {notif.message}
+                              </div>
+                              <div className="text-xs text-gray-500 truncate w-full">
+                                {new Date(notif.createdAt).toLocaleString()}
+                              </div>
+                            </div>
+                            <button
+                              className="ml-2 text-blue-600 hover:underline text-xs whitespace-nowrap"
+                              onClick={() => navigate("/bookings")}
+                            >
+                              View
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <button

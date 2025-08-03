@@ -10,6 +10,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const notificationRoutes = require("./routes/notificationRoute");
 const bookingRoutes = require("./routes/bookingRoute");
+const timesheetRoutes = require("./routes/timeRoutes.js");
 
 require("dotenv").config();
 const port = process.env.PORT || 3000;
@@ -26,7 +27,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/bookings", bookingRoutes);
-
+app.use("/api/timesheets", timesheetRoutes);
 app.listen(port, () => {
   console.log(`Server is listening to the Port : ${port}`);
   connect();
