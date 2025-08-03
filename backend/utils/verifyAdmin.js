@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 exports.verifyAdmin = (req, res, next) => {
-    console.log("Verifying admin...");
   const token = req.cookies?.admin_token;
 
   if (!token) {

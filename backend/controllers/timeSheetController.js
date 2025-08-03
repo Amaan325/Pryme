@@ -2,7 +2,6 @@ const { get } = require("mongoose");
 const TimeSheet = require("../models/TimeSheet");
 
 const createTimesheet = async (req, res) => {
-    console.log("Creating timesheet with data:", req.body);
   try {
     const { timesheets } = req.body;
 

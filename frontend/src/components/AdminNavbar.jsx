@@ -13,8 +13,9 @@ const AdminNavbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const socket = io(import.meta.env.VITE_BACKEND_URL, {
+    const socket = io("http://localhost:9700", {
       withCredentials: true,
+      transports: ["websocket", "polling"],
     });
 
     const checkAuth = async () => {
@@ -23,15 +24,17 @@ const AdminNavbar = () => {
         setIsAuthenticated(true);
         fetchNotifications();
 
-        socket.emit("join", "admin");
+        // Register admin only if authenticated
+        socket.emit("register-admin", { role: "admin" });
 
         socket.on("admin-notification", (notif) => {
+          console.log("📩 New socket notification received:", notif);
           setNotifications((prev) => [notif, ...prev]);
           setHasNewNotification(true);
         });
       } catch (err) {
         setIsAuthenticated(false);
-        console.error("Not authenticated:", err?.response?.data || err.message);
+        console.error("❌ Not authenticated:", err?.response?.data || err.message);
       }
     };
 
@@ -47,7 +50,7 @@ const AdminNavbar = () => {
       const res = await axiosInstance.get("/notifications");
       setNotifications(res.data);
     } catch (err) {
-      console.error("Failed to fetch notifications:", err.message);
+      console.error("❌ Failed to fetch notifications:", err.message);
     }
   };
 
@@ -62,17 +65,13 @@ const AdminNavbar = () => {
 
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
-    setHasNewNotification(false); // Mark notifications as seen
+    setHasNewNotification(false);
   };
 
   return (
     <div className="mx-4 sm:mx-8 md:mx-16 my-2 relative z-50 bg-white">
       <header className="flex items-center justify-between px-4 sm:px-8 py-4 relative">
-        <NavLink
-          to="/"
-          className="text-3xl font-bold text-blue-700"
-          style={{ fontFamily: "Jaro, sans-serif" }}
-        >
+        <NavLink to="/" className="text-3xl font-bold text-blue-700" style={{ fontFamily: "Jaro, sans-serif" }}>
           Pryme
         </NavLink>
 
@@ -126,7 +125,7 @@ const AdminNavbar = () => {
                             </div>
                             <button
                               className="ml-2 text-blue-600 hover:underline text-xs whitespace-nowrap"
-                              onClick={() => navigate("/bookings")}
+                              onClick={() => navigate("/admin/bookings")}
                             >
                               View
                             </button>

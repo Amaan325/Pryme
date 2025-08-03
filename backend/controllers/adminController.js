@@ -40,8 +40,6 @@ exports.logoutAdmin = (req, res) => {
 };
 
 exports.getAdminInfo = (req, res) => {
-  console.log("Fetching admin info...");
-  console.log(req.admin);
   res.json({
     admin: {
       email: process.env.ADMIN_EMAIL,
