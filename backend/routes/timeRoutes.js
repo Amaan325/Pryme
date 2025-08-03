@@ -8,9 +8,16 @@ const {
 
 const router = express.Router();
 
-router.post("/save", createTimesheet);
-router.get("/get", getTimesheets);
+// Create new timesheet(s)
+router.post("/", createTimesheet);
+
+// Get timesheets (with optional week query parameter)
+router.get("/", getTimesheets);
+
+// Update a specific timesheet
 router.put("/:id", updateTimesheet);
-router.delete("/:id/delete", deleteTimesheet);
+
+// Delete a specific timesheet
+router.delete("/:id", deleteTimesheet);
 
 module.exports = router;

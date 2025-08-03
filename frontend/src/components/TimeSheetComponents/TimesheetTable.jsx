@@ -4,22 +4,25 @@ import { useSnackbar } from "notistack";
 
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const TimesheetTable = () => {
-  const [week] = useState("2025-W32");
-  const { timesheets, fetchData, add, remove } = useTimesheetManager();
+const TimesheetTable = ({ selectedWeek, showAll }) => {
+  const { timesheets, fetchData, add, remove, loading } = useTimesheetManager(); // ✅ include loading
   const { enqueueSnackbar } = useSnackbar();
-
   const [localTimesheets, setLocalTimesheets] = useState([]);
 
-  // Initialize data
+  // Fetch data when filters change
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(showAll ? null : selectedWeek);
+  }, [selectedWeek, showAll]);
 
-  // Sync local state with fetched timesheets
+  // Update localTimesheets only after loading completes
   useEffect(() => {
-    setLocalTimesheets([...timesheets]);
-  }, [timesheets]);
+    if (!loading) {
+      const filteredTimesheets = showAll
+        ? timesheets
+        : timesheets.filter(entry => entry.week === selectedWeek);
+      setLocalTimesheets([...filteredTimesheets]);
+    }
+  }, [timesheets, selectedWeek, showAll, loading]);
 
   const handleInputChange = (index, dayIndex, value) => {
     if (value === "" || !isNaN(value)) {
@@ -34,7 +37,7 @@ const TimesheetTable = () => {
       project: "",
       role: "",
       activity: "",
-      week,
+      week: selectedWeek,
       dailyHours: Array(7).fill(""),
     };
     setLocalTimesheets((prev) => [...prev, newRow]);
@@ -47,7 +50,7 @@ const TimesheetTable = () => {
     const validTimesheets = newEntries.map((t) => ({
       ...t,
       dailyHours: t.dailyHours.map((h) => parseFloat(h) || 0),
-      week,
+      week: selectedWeek,
     }));
 
     if (validTimesheets.length === 0) {
@@ -56,9 +59,9 @@ const TimesheetTable = () => {
     }
 
     try {
-      await add(validTimesheets); // this now gets ALL new rows
+      await add(validTimesheets);
       enqueueSnackbar("Timesheets saved successfully!", { variant: "success" });
-      fetchData(); // refresh table
+      fetchData(showAll ? null : selectedWeek);
     } catch (err) {
       console.error("Save failed", err);
       enqueueSnackbar("Failed to save timesheets", { variant: "error" });
@@ -85,90 +88,94 @@ const TimesheetTable = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md space-y-6 overflow-hidden mb-2">
+    <div className="mt-2 bg-white rounded-xl shadow-md space-y-6 overflow-hidden mb-2">
       <h2 className="text-xl font-semibold p-6 border-b border-gray-100">
         Timesheet
       </h2>
 
-      <div className="rounded-md border border-gray-200 mx-6 mb-6 overflow-x-auto">
-        <table className="w-full text-sm text-left min-w-[800px]">
-          <thead className="bg-gray-300 text-gray-800">
-            <tr>
-              <th className="p-3">Project</th>
-              <th className="p-3">Role</th>
-              <th className="p-3">Activity</th>
-              {daysOfWeek.map((day, idx) => (
-                <th key={idx} className="p-3 text-center">
-                  {day}
-                </th>
-              ))}
-              <th className="p-3 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {localTimesheets.map((item, i) => (
-              <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-100"}>
-                <td className="p-3">
-                  <input
-                    type="text"
-                    value={item.project}
-                    onChange={(e) => {
-                      const updated = [...localTimesheets];
-                      updated[i].project = e.target.value;
-                      setLocalTimesheets(updated);
-                    }}
-                    className="bg-yellow-100 rounded px-3 py-1 w-full outline-none"
-                  />
-                </td>
-                <td className="p-3">
-                  <input
-                    type="text"
-                    value={item.role}
-                    onChange={(e) => {
-                      const updated = [...localTimesheets];
-                      updated[i].role = e.target.value;
-                      setLocalTimesheets(updated);
-                    }}
-                    className="bg-yellow-100 rounded px-3 py-1 w-full outline-none"
-                  />
-                </td>
-                <td className="p-3">
-                  <input
-                    type="text"
-                    value={item.activity}
-                    onChange={(e) => {
-                      const updated = [...localTimesheets];
-                      updated[i].activity = e.target.value;
-                      setLocalTimesheets(updated);
-                    }}
-                    className="bg-yellow-100 rounded px-3 py-1 w-full outline-none"
-                  />
-                </td>
-                {item.dailyHours.map((hour, dayIndex) => (
-                  <td key={dayIndex} className="p-3 text-center">
+      {loading ? (
+        <div className="text-center text-gray-500 py-10">Loading timesheets...</div>
+      ) : (
+        <div className="rounded-md border border-gray-200 mx-6 mb-6 overflow-x-auto">
+          <table className="w-full text-sm text-left min-w-[800px]">
+            <thead className="bg-gray-300 text-gray-800">
+              <tr>
+                <th className="p-3">Project</th>
+                <th className="p-3">Role</th>
+                <th className="p-3">Activity</th>
+                {daysOfWeek.map((day, idx) => (
+                  <th key={idx} className="p-3 text-center">
+                    {day}
+                  </th>
+                ))}
+                <th className="p-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {localTimesheets.map((item, i) => (
+                <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-100"}>
+                  <td className="p-3">
                     <input
                       type="text"
-                      value={hour}
-                      onChange={(e) =>
-                        handleInputChange(i, dayIndex, e.target.value)
-                      }
-                      className="bg-blue-100 text-sm px-2 py-1 rounded w-16 text-center outline-none"
+                      value={item.project}
+                      onChange={(e) => {
+                        const updated = [...localTimesheets];
+                        updated[i].project = e.target.value;
+                        setLocalTimesheets(updated);
+                      }}
+                      className="bg-yellow-100 rounded px-3 py-1 w-full outline-none"
                     />
                   </td>
-                ))}
-                <td className="p-3 text-center">
-                  <button
-                    onClick={() => handleDelete(i, item._id)}
-                    className="text-red-600 hover:underline"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  <td className="p-3">
+                    <input
+                      type="text"
+                      value={item.role}
+                      onChange={(e) => {
+                        const updated = [...localTimesheets];
+                        updated[i].role = e.target.value;
+                        setLocalTimesheets(updated);
+                      }}
+                      className="bg-yellow-100 rounded px-3 py-1 w-full outline-none"
+                    />
+                  </td>
+                  <td className="p-3">
+                    <input
+                      type="text"
+                      value={item.activity}
+                      onChange={(e) => {
+                        const updated = [...localTimesheets];
+                        updated[i].activity = e.target.value;
+                        setLocalTimesheets(updated);
+                      }}
+                      className="bg-yellow-100 rounded px-3 py-1 w-full outline-none"
+                    />
+                  </td>
+                  {item.dailyHours.map((hour, dayIndex) => (
+                    <td key={dayIndex} className="p-3 text-center">
+                      <input
+                        type="text"
+                        value={hour}
+                        onChange={(e) =>
+                          handleInputChange(i, dayIndex, e.target.value)
+                        }
+                        className="bg-blue-100 text-sm px-2 py-1 rounded w-16 text-center outline-none"
+                      />
+                    </td>
+                  ))}
+                  <td className="p-3 text-center">
+                    <button
+                      onClick={() => handleDelete(i, item._id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="flex items-center flex-wrap gap-4 px-6 pb-6">
         <button

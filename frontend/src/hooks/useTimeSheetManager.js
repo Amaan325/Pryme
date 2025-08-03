@@ -1,57 +1,40 @@
-import { useState, useEffect, useCallback } from "react";
-import { useTimesheetActions } from "./useTimesheetActions";
+import { useState } from "react";
+import axios from "../utils/axiosInstance";
 
 export const useTimesheetManager = () => {
   const [timesheets, setTimesheets] = useState([]);
-  const { fetchTimesheets, addTimesheet, deleteTimesheet } =
-    useTimesheetActions();
+  const [loading, setLoading] = useState(false); // ✅ New loading state
 
-  const fetchData = useCallback(
-    async (params = {}) => {
-      try {
-        const data = await fetchTimesheets(params);
-        setTimesheets(data);
-        return data;
-      } catch (error) {
-        console.error("Error fetching timesheets:", error);
-        throw error;
-      }
-    },
-    [fetchTimesheets]
-  );
-
-  const add = useCallback(
-  async (entries) => {
+  const fetchData = async (week = null) => {
+    setLoading(true); // ✅ Begin loading
     try {
-      await addTimesheet(entries); // send all at once
-      await fetchData();
-    } catch (error) {
-      console.error("Error adding timesheet:", error);
-      throw error;
+      const url = week ? `/timesheets?week=${week}` : "/timesheets";
+      const res = await axios.get(url);
+      setTimesheets(res.data);
+    } catch (err) {
+      console.error("Error fetching timesheets", err);
+    } finally {
+      setLoading(false); // ✅ End loading
     }
-  },
-  [addTimesheet, fetchData]
-);
-
-
-  const remove = useCallback(
-    async (id) => {
-      try {
-        await deleteTimesheet(id);
-        setTimesheets((prev) => prev.filter((e) => e._id !== id));
-      } catch (error) {
-        console.error("Error deleting timesheet:", error);
-        throw error;
-      }
-    },
-    [deleteTimesheet]
-  );
-
-  return {
-    timesheets,
-    fetchData,
-    add,
-    remove,
-    setTimesheets,
   };
+
+  const add = async (data) => {
+const res = await axios.post("/timesheets", { timesheets: data });
+    const newEntries = Array.isArray(res.data) ? res.data : [res.data];
+    setTimesheets((prev) => [...prev, ...newEntries]);
+    return res.data;
+  };
+
+  const update = async (id, data) => {
+    const res = await axios.put(`/timesheets/${id}`, data);
+    setTimesheets((prev) => prev.map((t) => (t._id === id ? res.data : t)));
+    return res.data;
+  };
+
+  const remove = async (id) => {
+    await axios.delete(`/timesheets/${id}`);
+    setTimesheets((prev) => prev.filter((t) => t._id !== id));
+  };
+
+  return { timesheets, fetchData, add, update, remove, loading }; // ✅ Return loading
 };

@@ -1,3 +1,4 @@
+const { get } = require("mongoose");
 const TimeSheet = require("../models/TimeSheet");
 
 const createTimesheet = async (req, res) => {
@@ -17,15 +18,15 @@ const createTimesheet = async (req, res) => {
 };
 
 const getTimesheets = async (req, res) => {
-    // console.log("Fetching timesheets with params:");
+  const { week } = req.query;
   try {
-    const entries = await TimeSheet.find().sort({ createdAt: -1 });
-    res.json(entries);
+    const query = week ? { week } : {};
+    const timesheets = await TimeSheet.find(query);
+    res.json(timesheets);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: "Failed to fetch timesheets" });
   }
 };
-
 const updateTimesheet = async (req, res) => {
   try {
     const updated = await TimeSheet.findByIdAndUpdate(req.params.id, req.body, {
@@ -48,7 +49,7 @@ const deleteTimesheet = async (req, res) => {
 
 module.exports = {
   createTimesheet,
-  getTimesheets,
+  getTimesheets ,
   updateTimesheet,
   deleteTimesheet,
 };

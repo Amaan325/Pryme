@@ -1,34 +1,55 @@
-import axiosInstance from "../utils/axiosInstance";
+// // src/hooks/useTimesheetActions.js
 
-export const useTimesheetActions = () => {
-  const fetchTimesheets = async (params = {}) => {
-    console.log("Fetching timesheets with params:", params);
-    const queryString = new URLSearchParams(params).toString();
-    const res = await axiosInstance.get(`/timesheets/get?${queryString}`);
-    return res.data;
-  };
+// import { useState } from "react";
+// import axios from "../utils/axiosInstance";
 
- const addTimesheet = async (payloadArray) => {
-  const res = await axiosInstance.post("/timesheets/save", {
-    timesheets: payloadArray,
-  });
-  return res.data;
-};
+// export const useTimesheetActions = () => {
+//   const [timesheets, setTimesheets] = useState([]);
 
+//   const fetchTimesheets = async (params = {}) => {
+//     try {
+//       const queryString = new URLSearchParams(params).toString();
+//       const res = await axios.get(`/timesheets/get?${queryString}`);
+//       setTimesheets(res.data);
+//     } catch (err) {
+//       console.error("Failed to fetch timesheets:", err);
+//     }
+//   };
 
-  const deleteTimesheet = async (id) => {
-    await axiosInstance.delete(`/timesheets/${id}/delete`);
-  };
+//   const addTimesheet = async (payloadArray) => {
+//     try {
+//       const res = await axios.post("/timesheets/save", { timesheets: payloadArray });
+//       setTimesheets((prev) => [...prev, ...res.data]);
+//     } catch (err) {
+//       console.error("Failed to add timesheets:", err);
+//     }
+//   };
 
-  const updateTimesheet = async (payload) => {
-    const res = await axiosInstance.put("/timesheets/update", payload);
-    return res.data;
-  };
+//   const updateTimesheet = async (payload) => {
+//     try {
+//       const res = await axios.put("/timesheets/update", payload);
+//       setTimesheets((prev) =>
+//         prev.map((t) => (t._id === res.data._id ? res.data : t))
+//       );
+//     } catch (err) {
+//       console.error("Failed to update timesheet:", err);
+//     }
+//   };
 
-  return {
-    addTimesheet,
-    deleteTimesheet,
-    fetchTimesheets,
-    updateTimesheet
-  };
-};
+//   const deleteTimesheet = async (id) => {
+//     try {
+//       await axios.delete(`/timesheets/${id}/delete`);
+//       setTimesheets((prev) => prev.filter((t) => t._id !== id));
+//     } catch (err) {
+//       console.error("Failed to delete timesheet:", err);
+//     }
+//   };
+
+//   return {
+//     timesheets,
+//     fetchTimesheets,
+//     addTimesheet,
+//     updateTimesheet,
+//     deleteTimesheet,
+//   };
+// };
