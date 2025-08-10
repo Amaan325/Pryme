@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import HomePage1 from "../assets/Homepage1.jpg";
 import Featureimage1 from "../assets/feature1.jpg";
@@ -10,6 +11,8 @@ import User4 from "../assets/user4.png";
 import Footer from "../components/Footer";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -30,10 +33,16 @@ export default function HomePage() {
               Expert Home Services at Your Doorstep. Satisfaction Guaranteed!
             </p>
             <div className="mt-6 space-x-4">
-              <button className="bg-white text-blue-600 px-4 py-2 rounded-md font-medium w-44">
+              <button
+                onClick={() => navigate("/signup")}
+                className="bg-white cursor-pointer text-blue-600 px-4 py-2 rounded-md font-medium w-44"
+              >
                 Get Started
               </button>
-              <button className="px-4 font-medium">
+              <button
+                onClick={() => navigate("/login")}
+                className="px-4 font-medium cursor-pointer"
+              >
                 <span className="border-b-2 border-white inline-block w-12 text-center">
                   Log In
                 </span>
@@ -90,7 +99,10 @@ export default function HomePage() {
                       {service.description}
                     </p>
                   </div>
-                  <button className="mt-4 text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 w-full">
+                  <button
+                    onClick={() => navigate(`/booking/${service.title.toLowerCase().replace(/\s+/g, "-")}`)}
+                    className="mt-4 text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50 w-full"
+                  >
                     Book Now
                   </button>
                 </div>

@@ -1,13 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HiMiniChartBarSquare } from "react-icons/hi2";
 import { LuNotebookText } from "react-icons/lu";
-import { IoPricetagSharp } from "react-icons/io5";
-import { RiContactsFill } from "react-icons/ri";
+import { IoRepeatSharp } from "react-icons/io5"; // New icon for repeat customers
+import { RiUserAddFill } from "react-icons/ri"; // New icon for first-time customers
+import axiosInstance from "../utils/axiosInstance";
 
 const AdminStatsBoxes = () => {
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await axiosInstance.get("/bookings");
+        setBookings(res.data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  if (loading) {
+    return <div>Loading stats...</div>;
+  }
+
+  // ----- Stats Calculation -----
+  const totalBookings = bookings.length;
+
+  // Bookings made today
+  const today = new Date().toISOString().split("T")[0];
+  const todayBookings = bookings.filter(
+    (b) => b.createdAt && b.createdAt.startsWith(today)
+  ).length;
+
+  // Repeat Customers
+  const customerCounts = bookings.reduce((acc, b) => {
+    if (b.email) {
+      acc[b.email] = (acc[b.email] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  const repeatCustomers = Object.values(customerCounts).filter((count) => count > 1).length;
+
+  // First-Time Customers
+  const firstTimeCustomers = Object.values(customerCounts).filter((count) => count === 1).length;
+
   const stats = [
     {
-      value: "762",
+      value: totalBookings,
       label: "Total Bookings",
       change: "+8% from yesterday",
       color: "bg-red-100 text-red-600",
@@ -15,7 +59,7 @@ const AdminStatsBoxes = () => {
       iconColor: "text-red-600",
     },
     {
-      value: "12",
+      value: todayBookings,
       label: "New Bookings",
       change: "+5% from yesterday",
       color: "bg-orange-100 text-orange-600",
@@ -23,19 +67,19 @@ const AdminStatsBoxes = () => {
       iconColor: "text-orange-600",
     },
     {
-      value: "4,321",
-      label: "New Visitors",
-      change: "+12% from yesterday",
+      value: repeatCustomers,
+      label: "Repeat Customers",
+      change: "+2% from last week",
       color: "bg-green-100 text-green-600",
-      icon: IoPricetagSharp,
+      icon: IoRepeatSharp,
       iconColor: "text-green-600",
     },
     {
-      value: "333",
-      label: "Completed",
-      change: "0% from yesterday",
+      value: firstTimeCustomers,
+      label: "First-Time Customers",
+      change: "+4% from last week",
       color: "bg-purple-100 text-purple-600",
-      icon: RiContactsFill,
+      icon: RiUserAddFill,
       iconColor: "text-purple-600",
     },
   ];
