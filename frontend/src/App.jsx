@@ -24,6 +24,7 @@ import AllServices from "./pages/AllServices";
 import BookingList from "./components/AddServices/BookingList";
 import AppWrapper from "./AppWrapper";
 import AdminWrapper from "./AdminWrapper";
+import RateUs from "./pages/RateUs";
 
 const App = () => {
   return (
@@ -104,6 +105,14 @@ const App = () => {
             element={
               <AppWrapper>
                 <RecoverPassword2 />
+              </AppWrapper>
+            }
+          />
+           <Route
+            path="/review-us"
+            element={
+              <AppWrapper>
+                <RateUs />
               </AppWrapper>
             }
           />

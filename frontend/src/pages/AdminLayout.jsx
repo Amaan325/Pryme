@@ -13,7 +13,7 @@ const AdminLayout = () => {
   };
 
   // List of routes where ServicesTabs should be hidden
-  const excludedRoutes = ["/admin/dashboard", "/admin/allservices", "/admin/add-services" ,  "/admin/reviews" , "/admin/timesheet"];
+  const excludedRoutes = ["/admin/dashboard", "/admin/allservices", "/admin/add-services"  , "/admin/timesheet"];
 
   // Show tabs if in /admin and not in the excluded list
   const showTabs =

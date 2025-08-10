@@ -28,13 +28,14 @@ const serviceRoutes = require("./routes/serviceRoutes");
 const notificationRoutes = require("./routes/notificationRoute");
 const bookingRoutes = require("./routes/bookingRoute");
 const timesheetRoutes = require("./routes/timeRoutes.js");
-
+const reviewRoutes = require("./routes/reviewRoutes.js");
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/timesheets", timesheetRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Create HTTP server and bind socket.io
 const server = http.createServer(app);

@@ -15,11 +15,7 @@ const TimeSheet = () => {
         showAll={showAll}
         setShowAll={setShowAll}
       />
-      <TimesheetTable 
-        selectedWeek={selectedWeek} 
-        showAll={showAll} 
-      />
-      <TimesheetComments />
+      <TimesheetTable selectedWeek={selectedWeek} showAll={showAll} />
     </div>
   );
 };

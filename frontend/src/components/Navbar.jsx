@@ -58,6 +58,9 @@ const Navbar = () => {
           <NavLink to="/contact-us" className="text-gray-700 hover:text-blue-600">
             Contact
           </NavLink>
+          <NavLink to="/review-us" className="text-gray-700 hover:text-blue-600">
+            Rate Us
+          </NavLink>
         </nav>
 
         {/* Auth Buttons Desktop */}
